@@ -75,12 +75,24 @@
         .number {
             font-size: 20px;
         }
+        .question-container{
+            height:350px; 
+            margin-top:250px;
+            width:1000px; 
+            padding:2rem;
+        }
+        @media screen and (max-width: 768px) {
+            .question-container{
+                margin-left: 0;
+                margin-right: 0;
+            }
+        }
+        
     </style>
 </head>
 
 <body class="container p-3 my-3 bg-dark text-black ">
-    <div class="jumbotron jumbotron-fluid"
-        style="height:350px; margin-top:250px; width:1000px; margin-left:60px;margin-right: 60px; padding:2rem;">
+    <div class="jumbotron jumbotron-fluid question-container">
         <div class="slidecontainer">
             <h1>QUESTIONNAIRE</h1>
             <div class="question-page text-right"><span class="current-page"></span>/50</div>
@@ -1043,6 +1055,7 @@
     <script>
         var qCnt = 1;
         var data = [];
+        
         displayQuestionCount();
         // function dec() {
         //var x = parseInt(document.getElementById("inc").value, 10);
@@ -1058,9 +1071,15 @@
         function next() {
             var qElems = document.querySelectorAll('#data>div');
             qCnt++;
-
+           
             var currQuestionVal = $(".active-question .slider").val();
-            data.push(currQuestionVal);
+
+            if(data.length < qCnt){
+                 data.push(currQuestionVal);
+                 data[qCnt - 1]=currQuestionVal;
+            }
+
+            
             var nxtCntrl = $(".active-question").next();
             $("body").find(".active-question").removeClass("active-question");
             $(nxtCntrl).addClass("active-question");
@@ -1087,7 +1106,7 @@
                 displayQuestionCount();
             }
             var currQuestionVal = $(".active-question .slider").val();
-            data.unshift(currQuestionVal);
+            data[qCnt -1 ]=currQuestionVal;
             var nxtCntrl = $(".active-question").prev();
             $("body").find(".active-question").removeClass("active-question");
             $(nxtCntrl).addClass("active-question");
@@ -1098,14 +1117,15 @@
                 if (qElems[i].style.display != 'none') {
                     qElems[i].style.display = 'none';
                     if (i < 1) {
-                        document.getElementById("q1").hidden = true;
+                        // document.getElementById("mybtn").hidden = true;
+                        $('mybtn').hide();
                     } else {
                         qElems[i - 1].style.display = 'block';
                     }
                     break;
                 }
             }
-        }
+        }   
 
         function displayQuestionCount() {
             $(".number").text("Q" + qCnt + ". ");
